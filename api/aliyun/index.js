@@ -18,9 +18,9 @@ module.exports = async (ctx, next) =>{
     console.log(request.query);
     let files = await listFiles(request.query);
     response.body = files ? JSON.stringify(files) : '';
-  } else if(ctx.path === "/aliyun/list_files" && ctx.method === "post"){
-    
-    // await uploadFileSteam({file_path, file_name, dir})
+  } else if(ctx.path === "/aliyun/upload_file" && ctx.method === "POST"){
+    // console.log(request.body);
+    await uploadFileSteam(request.body)
   } else{
     response.status = 400;
     response.body = "path or method error";

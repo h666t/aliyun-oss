@@ -21,7 +21,7 @@ const listFiles = async ({number = 100, prefix, is_show_all_files = 0, next_cont
   return await oss.listV2(param);
 }
 
-const uploadFileSteam = async (file_path, file_name, dir) => {
+const uploadFileSteam = async ({file_path, file_name, dir}) => {
   if(!file_path || !file_name || !dir){
     throw new Error('uploadFileSteam缺少必要参数')
   }
