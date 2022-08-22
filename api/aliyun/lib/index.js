@@ -5,7 +5,7 @@ let oss = "";
 let ossOption = {
   region: 'oss-cn-shanghai',
   accessKeyId: secretConfig.accessKeyId,
-  accessKeySecret: secretConfig.AccessKeySecret
+  accessKeySecret: secretConfig.accessKeySecret
 }
 const  initOSS = () => {
   if (!oss) {

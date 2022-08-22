@@ -1,14 +1,13 @@
 const {getOSS} = require("../lib")
 const {appointBucket} = require("../buckets")
-const listAllFiles = async (number = 100) => {
+const listFiles = async (number = 100) => {
   await appointBucket()
   let oss = getOSS()
-  console.log(oss)
-  return await oss.list({
+  return await oss.listV2({
     "max-keys": number
   });
 }
 
 module.exports = {
-  listAllFiles
+  listFiles
 }
