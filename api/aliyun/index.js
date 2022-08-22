@@ -15,9 +15,13 @@ module.exports = async (ctx, next) =>{
     let buckets = await listAllBuckets();
     response.write(buckets ? JSON.stringify(buckets) : '');
   } else if(ctx.path === "/aliyun/list_files" && ctx.method === "GET"){
-    let files = await listFiles();
+    console.log(request.query);
+    let files = await listFiles(request.query);
     response.body = files ? JSON.stringify(files) : '';
-  } else {
+  } else if(ctx.path === "/aliyun/list_files" && ctx.method === "post"){
+    
+    // await uploadFileSteam({file_path, file_name, dir})
+  } else{
     response.status = 400;
     response.body = "path or method error";
   }
