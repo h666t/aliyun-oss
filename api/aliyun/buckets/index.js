@@ -1,15 +1,15 @@
-const {getOSS, updateOSS} = require("../lib")
-const listAllBuckets = async () => {
-  let oss = getOSS()
+const {_getOSS, _updateOSS} = require("../lib")
+const _listAllBuckets = async () => {
+  let oss = _getOSS()
   return  await oss.listBuckets();
 }
-const appointBucket = async () => {
-  let allBuckets = await listAllBuckets();
-  return updateOSS({
+const _appointBucket = async () => {
+  let allBuckets = await _listAllBuckets();
+  return _updateOSS({
     bucket: allBuckets.buckets[0]['name']
   });
 }
 module.exports = {
-  listAllBuckets,
-  appointBucket
+  _listAllBuckets,
+  _appointBucket
 }

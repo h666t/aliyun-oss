@@ -7,18 +7,19 @@ let ossOption = {
   accessKeyId: secretConfig.accessKeyId,
   accessKeySecret: secretConfig.accessKeySecret
 }
-const  initOSS = () => {
+
+const  _initOSS = () => {
   if (!oss) {
     oss = new OSS(ossOption)
   }
   return oss
 }
 
-const getOSS = () => {
+const _getOSS = () => {
   return oss
 }
 
-const updateOSS = (obj) => {
+const _updateOSS = (obj) => {
   ossOption = {
     ...ossOption,
     ...obj
@@ -28,7 +29,7 @@ const updateOSS = (obj) => {
 };
 
 module.exports = {
-  initOSS,
-  getOSS,
-  updateOSS
+  _initOSS,
+  _getOSS,
+  _updateOSS
 }

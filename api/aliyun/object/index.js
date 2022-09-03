@@ -1,11 +1,11 @@
-const {getOSS} = require("../lib")
-const {appointBucket} = require("../buckets")
+const {_getOSS} = require("../lib")
+const {_appointBucket} = require("../buckets")
 const fs = require('fs');
 const path = require('path');
 
-const listFiles = async ({number = 100, prefix, is_show_all_files = 0, next_continuation_token = ""}) => {
-  await appointBucket()
-  let oss = getOSS()
+const _listFiles = async ({number = 100, prefix, is_show_all_files = 0, next_continuation_token = ""}) => {
+  await _appointBucket()
+  let oss = _getOSS()
   let param = {
     "max-keys": number,
   };
@@ -21,21 +21,21 @@ const listFiles = async ({number = 100, prefix, is_show_all_files = 0, next_cont
   return await oss.listV2(param);
 }
 
-const uploadFileSteam = async ({file_path, file_name, dir}) => { // 流上传
+const _uploadFileSteam = async ({file_path, file_name, dir}) => { // 流上传
   if(!file_path || !file_name || !dir){
     throw new Error('uploadFileSteam缺少必要参数')
   }
-  await appointBucket();
+  await _appointBucket();
   file_path = path.normalize(file_path);
-  let oss = getOSS();
+  let oss = _getOSS();
   let stream = fs.createReadStream(file_path);
   let extname = path.extname(file_path);
   console.log(extname);
   console.log(file_path);
-  return await oss.putStream(`${dir}/${file_name}.${extname}`, stream);
+  return await oss.putStream(`${dir}/${file_name}${extname}`, stream);
 };
 
-const uploadFileMultipart = async ({file_path, file_name, dir}) => { // 分片上传
+const _uploadFileMultipart = async ({file_path, file_name, dir}) => { // 分片上传
   if(!file_path || !file_name || !dir){
     throw new Error('uploadFileSteam缺少必要参数')
   }
@@ -43,17 +43,17 @@ const uploadFileMultipart = async ({file_path, file_name, dir}) => { // 分片�
   // TODO 需要一个缓存来实现记录上传进度和当前正在上传的任务？
   const progress = (p, _checkpoint) => {
     // Object的上传进度。
-    console.log(p); 
+    console.log(p);
     // 分片上传的断点信息。
     console.log(_checkpoint);
   };
 
-  await appointBucket();
+  await _appointBucket();
   file_path = path.normalize(file_path);
-  let oss = getOSS();
+  let oss = _getOSS();
   let extname = path.extname(file_path);
 
-  let res = await oss.multipartUpload(`${dir}/${file_name}.${extname}`, file_path, {
+  let res = await oss.multipartUpload(`${dir}/${file_name}${extname}`, file_path, {
     progress,
     headers: {
       'Content-Encoding': 'utf-8',
@@ -70,8 +70,31 @@ const uploadFileMultipart = async ({file_path, file_name, dir}) => { // 分片�
   return res;
 };
 
+const _abortMultipartUpload = async ({path, uploadId}) => {
+  await _appointBucket();
+  let oss = _getOSS();
+  return  await oss.abortMultipartUpload(path, uploadId, {});
+};
+
+const _listMultipartUpload = async (query = {}) => { // 1000个
+  query['max-uploads'] = 1000;
+  await _appointBucket()
+  let oss = _getOSS();
+  return  await oss.listUploads(query, {});
+}
+
+const _listAllFinishedMultipartUpload = async ({path, uploadId, query = {}}) => {
+  query['max-uploads'] = 1000;
+  await _appointBucket()
+  let oss = _getOSS()
+  return await oss.listParts(path, uploadId, query, {});
+}
+
 module.exports = {
-  listFiles,
-  uploadFileSteam,
-  uploadFileMultipart
+  _listFiles,
+  _uploadFileSteam,
+  _uploadFileMultipart,
+  _abortMultipartUpload,
+  _listMultipartUpload,
+  _listAllFinishedMultipartUpload
 }
