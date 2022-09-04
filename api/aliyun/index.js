@@ -1,7 +1,13 @@
 const OSS = require('ali-oss');
 const {_initOSS} = require("./lib")
 const {_listAllBuckets} = require("./buckets")
-const {_listFiles, _uploadFileSteam, _uploadFileMultipart, _listMultipartUpload, _listAllFinishedMultipartUpload} = require("./object")
+const {_listFiles} = require("./object")
+const {
+  _uploadFileSteam,
+  _uploadFileMultipart,
+  _listMultipartUpload,
+  _listAllFinishedMultipartUpload
+} = require("./object/upload")
 
 module.exports = async (ctx, next) => {
   let response = ctx.response;
@@ -27,7 +33,7 @@ module.exports = async (ctx, next) => {
   } else if (ctx.path === "/aliyun/list_multipart_upload" && ctx.method === "GET") {
     let listMultipartUploadResult = await _listMultipartUpload();
     response.body = listMultipartUploadResult ? JSON.stringify(listMultipartUploadResult) : '';
-  } else if (ctx.path === "/aliyun/list_all_finished_multipart_upload" && ctx.method === "GET"){
+  } else if (ctx.path === "/aliyun/list_all_finished_multipart_upload" && ctx.method === "GET") {
     console.log(request.query)
     let listAllFinishedMultipartUploadResult = await _listAllFinishedMultipartUpload(request.query);
     response.body = listAllFinishedMultipartUploadResult ? JSON.stringify(listAllFinishedMultipartUploadResult) : '';
