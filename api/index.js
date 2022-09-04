@@ -12,4 +12,4 @@ app.use(aliyunMiddleWare)
 app.use(router.routes())
 
 app.listen(3456);
-console.log('开启服务成功，正在监听3456端口');
+console.log('开启服务成功，正在监听3456端口; dev_url: localhost:3456');

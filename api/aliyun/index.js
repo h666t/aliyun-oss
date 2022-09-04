@@ -3,11 +3,12 @@ const {_initOSS} = require("./lib")
 const {_listAllBuckets} = require("./buckets")
 const {_listFiles} = require("./object")
 const {
-  _uploadFileSteam,
+  _uploadFileStream,
   _uploadFileMultipart,
   _listMultipartUpload,
   _listAllFinishedMultipartUpload
 } = require("./object/upload")
+const {_downloadFile, _downloadFileByStream} = require("./object/download")
 
 module.exports = async (ctx, next) => {
   let response = ctx.response;
@@ -25,7 +26,7 @@ module.exports = async (ctx, next) => {
     response.body = files ? JSON.stringify(files) : '';
   } else if (ctx.path === "/aliyun/upload_file_stream" && ctx.method === "POST") {
     console.log(request.body);
-    let uploadFileSteamResult = await _uploadFileSteam(request.body)
+    let uploadFileSteamResult = await _uploadFileStream(request.body)
     response.body = uploadFileSteamResult ? JSON.stringify(uploadFileSteamResult) : '';
   } else if (ctx.path === "/aliyun/upload_file_multipart" && ctx.method === "POST") {
     let uploadFileMultipartResult = await _uploadFileMultipart(request.body);
@@ -37,6 +38,13 @@ module.exports = async (ctx, next) => {
     console.log(request.query)
     let listAllFinishedMultipartUploadResult = await _listAllFinishedMultipartUpload(request.query);
     response.body = listAllFinishedMultipartUploadResult ? JSON.stringify(listAllFinishedMultipartUploadResult) : '';
+  } else if (ctx.path === "/aliyun/download_file" && ctx.method === "GET") {
+    console.log(request.query)
+    let downloadFileResult = await _downloadFile(request.query);
+    response.body = downloadFileResult ? JSON.stringify(downloadFileResult) : '';
+  }else if (ctx.path === "/aliyun/download_file_by_stream" && ctx.method === "GET") {
+    let downloadFileByStreamResult = await _downloadFileByStream(request.query);
+    response.body = downloadFileByStreamResult ? JSON.stringify(downloadFileByStreamResult) : '';
   } else {
     response.status = 400;
     response.body = "path or method error";

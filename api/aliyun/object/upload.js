@@ -2,7 +2,7 @@ const {_appointBucket} = require("../buckets")
 const path = require("path")
 const {_getOSS} = require("../lib")
 const fs = require("fs")
-const _uploadFileSteam = async ({file_path, file_name, dir}) => { // 流上传
+const _uploadFileStream = async ({file_path, file_name, dir}) => { // 流上传
   if (!file_path || !file_name || !dir) {
     throw new Error('uploadFileSteam缺少必要参数')
   }
@@ -72,7 +72,7 @@ const _listAllFinishedMultipartUpload = async ({path, uploadId, query = {}}) => 
 }
 
 module.exports = {
-  _uploadFileSteam,
+  _uploadFileStream,
   _uploadFileMultipart,
   _abortMultipartUpload,
   _listMultipartUpload,
