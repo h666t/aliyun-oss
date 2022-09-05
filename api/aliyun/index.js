@@ -1,7 +1,7 @@
 const OSS = require('ali-oss');
 const {_initOSS} = require("./lib")
 const {_listAllBuckets} = require("./buckets")
-const {_listFiles} = require("./object")
+const {_listFiles, _checkIsFileExist, _deleteSingleFile, _createDirectory} = require("./object")
 const {
   _uploadFileStream,
   _uploadFileMultipart,
@@ -45,6 +45,15 @@ module.exports = async (ctx, next) => {
   }else if (ctx.path === "/aliyun/download_file_by_stream" && ctx.method === "GET") {
     let downloadFileByStreamResult = await _downloadFileByStream(request.query);
     response.body = downloadFileByStreamResult ? JSON.stringify(downloadFileByStreamResult) : '';
+  }else if (ctx.path === "/aliyun/check_is_file_exist" && ctx.method === "GET") {
+    let checkIsFileExistResult = await _checkIsFileExist(request.query);
+    response.body = checkIsFileExistResult ? JSON.stringify(checkIsFileExistResult) : '';
+  }else if (ctx.path === "/aliyun/delete_single_file" && ctx.method === "GET") {
+    let deleteSingleFileResult = await _deleteSingleFile(request.query);
+    response.body = deleteSingleFileResult ? JSON.stringify(deleteSingleFileResult) : '';
+  }else if (ctx.path === "/aliyun/create_directory" && ctx.method === "GET") {
+    let createDirectoryResult = await _createDirectory(request.query);
+    response.body = createDirectoryResult ? JSON.stringify(createDirectoryResult) : '';
   } else {
     response.status = 400;
     response.body = "path or method error";
