@@ -2,9 +2,13 @@ const Koa = require('koa');
 const aliyunMiddleWare = require("./aliyun/index");
 const Router = require('koa-router');
 const bodyParser = require('koa-bodyparser');
+const { _startDatabase, _checkIsDatabasecontect } = require('./database');
 
 const app = new Koa();
 const router = new Router();
+
+_startDatabase();
+_checkIsDatabasecontect();
 
 app.use(bodyParser());
 app.use(aliyunMiddleWare)
