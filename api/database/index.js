@@ -19,11 +19,11 @@ const _checkIsDatabasecontect = async function(){
         return 'Connection has been established successfully.'
     } catch (error) {
         console.error('Unable to connect to the database:', error);
-        return error
+        throw new Error(error)
     }
 }
 
-const _getSequelize = function () {
+const _getSequelizeClient = function () {
     if(sequelize){
         return sequelize
     } else {
@@ -35,5 +35,5 @@ const _getSequelize = function () {
 module.exports = {
     _startDatabase,
     _checkIsDatabasecontect,
-    _getSequelize
+    _getSequelizeClient
 }
